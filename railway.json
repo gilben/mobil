@@ -1,0 +1,9 @@
+{
+  "services": {
+    "backend": {
+      "root": "backend",
+      "buildCommand": "dotnet restore && dotnet build -c Release",
+      "startCommand": "dotnet run"
+    }
+  }
+}
