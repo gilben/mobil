@@ -25,11 +25,14 @@
       "expo-router"
     ],
     "scheme": "pasionprogramar",
+    "owner": "gacastrof",
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
         "projectId": "b9177b50-bd30-4934-834d-0fa224176310"
       }
-    },
-    "owner": "gacastrof"
+    }
   }
 }
