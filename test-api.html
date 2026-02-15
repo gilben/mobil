@@ -107,18 +107,13 @@
         .message {
             font-size: 14px;
         }
-        .spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(12, 84, 96, 0.3);
-            border-radius: 50%;
-            border-top-color: #0c5460;
-            animation: spin 0.8s linear infinite;
-            margin-right: 8px;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .env-info {
+            font-size: 12px;
+            color: #999;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
         }
     </style>
 </head>
@@ -144,6 +139,9 @@
             <div class="status" id="status"></div>
             <div class="message" id="message"></div>
         </div>
+        <div class="env-info">
+            <strong>Backend:</strong> https://mobil-production.up.railway.app
+        </div>
     </div>
 
     <script>
@@ -153,6 +151,9 @@
         const messageDiv = document.getElementById('message');
         const submitBtn = document.getElementById('submitBtn');
         const ageInput = document.getElementById('age');
+
+        // Use Railway URL
+        const BACKEND_URL = 'https://mobil-production.up.railway.app';
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -168,7 +169,7 @@
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch('http://localhost:5002/api/age-check', {
+                const response = await fetch(`${BACKEND_URL}/api/age-check`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -185,7 +186,8 @@
                 }
             } catch (error) {
                 showResult('error', '❌ Error de Conexión', 
-                    'No se pudo conectar al servidor. Asegúrate de que http://localhost:5002 esté disponible.');
+                    'No se pudo conectar al servidor. Intenta nuevamente en unos momentos.');
+                console.error('Error:', error);
             } finally {
                 submitBtn.disabled = false;
             }

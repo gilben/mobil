@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 
-const BACKEND_URL = 'http://localhost:5002';
+const BACKEND_URL = 'https://mobil-production.up.railway.app';
 
 export default function AgeCheckScreen() {
   const [age, setAge] = useState('');
