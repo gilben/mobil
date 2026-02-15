@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Cors;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure port from environment or default
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5002";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}", $"http://localhost:{port}");
+// Configure port - Railway uses PORT env var, default to 8080
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Add services
 builder.Services.AddControllers();
