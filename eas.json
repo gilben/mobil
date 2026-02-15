@@ -1,0 +1,10 @@
+{
+  "build": {
+    "production": {
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  },
+  "projectId": "b9177b50-bd30-4934-834d-0fa224176310"
+}
