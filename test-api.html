@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API - Pasión por Programar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+        }
+        .result.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result.loading {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            display: block;
+        }
+        .status {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .message {
+            font-size: 14px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(12, 84, 96, 0.3);
+            border-radius: 50%;
+            border-top-color: #0c5460;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Programar es mi pasión</h1>
+        <form id="ageForm">
+            <div class="form-group">
+                <label for="age">Edad</label>
+                <input 
+                    type="number" 
+                    id="age" 
+                    name="age" 
+                    placeholder="Ingresa tu edad"
+                    min="0"
+                    max="150"
+                    required
+                >
+            </div>
+            <button type="submit" id="submitBtn">Aceptar</button>
+        </form>
+        <div class="result" id="result">
+            <div class="status" id="status"></div>
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('ageForm');
+        const resultDiv = document.getElementById('result');
+        const statusDiv = document.getElementById('status');
+        const messageDiv = document.getElementById('message');
+        const submitBtn = document.getElementById('submitBtn');
+        const ageInput = document.getElementById('age');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const age = parseInt(ageInput.value);
+            
+            if (isNaN(age) || age < 0) {
+                showResult('error', 'Error', 'Por favor ingresa una edad válida');
+                return;
+            }
+
+            showResult('loading', '⏳ Enviando...', '');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:5002/api/age-check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ age: age })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showResult('success', '✅ Éxito', data.message);
+                } else {
+                    const data = await response.json();
+                    showResult('error', '❌ Error', data.error || 'Error en la solicitud');
+                }
+            } catch (error) {
+                showResult('error', '❌ Error de Conexión', 
+                    'No se pudo conectar al servidor. Asegúrate de que http://localhost:5002 esté disponible.');
+            } finally {
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showResult(type, status, message) {
+            resultDiv.className = `result ${type}`;
+            statusDiv.textContent = status;
+            messageDiv.textContent = message;
+            if (type !== 'loading') {
+                resultDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
