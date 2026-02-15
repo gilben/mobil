@@ -1,0 +1,18 @@
+# Don't include unnecessary files in builds
+**/.git
+**/.gitignore
+**/node_modules
+**/npm-debug.*
+**/.env
+**/.env.local
+**/Thumbs.db
+**/.DS_Store
+**/*.jks
+**/*.p8
+**/*.p12
+**/*.key
+**/*.mobileprovision
+**/*.orig.*
+**/.easignore
+**/docs
+**/backend
